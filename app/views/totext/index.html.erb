@@ -1,0 +1,13 @@
+<h1>なろう→  i文庫S</h1>
+
+<p>
+<a href="http://syosetu.com/">小説家になろう</a>にあるオンライン小説を、<a href="http://ipn.sakura.ne.jp/ibunkos/index.html">i文庫S</a>用のテキストファイルに変換し、i文庫用の表題情報付きのリンクを作成するプログラムです。
+
+<%= form_tag('totext/show/') do |f| %>
+<div class="field">
+Target URL: <%= text_field_tag "dest","http://ncode.syosetu.com/n6210bh/" %>
+</div>
+<div class="actions">
+<%= submit_tag "submit" %>
+</div>
+<% end %>
