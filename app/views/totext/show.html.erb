@@ -1,7 +1,7 @@
 <h1>ファイル作成終了</h1>
 <p>
-Title: <%= @title %><br />
-Author: <%= @author %><br />
+Title: <%= @novel.title %><br />
+Author: <%= @novel.author %><br />
 <hr>
-link to Textfile: <%= link_to("Text File",root_url + @docname) %><br />
-for iBunko: <a href="ib<%= root_url + @docname + @ibstr %>"> iBunko </a>
+text data: <a href="<%= url_for(:controller => "totext", :action => "item", :only_path => false) + "/" + @docname + @ibstr %>"> test file </a><br />
+for iBunko url: <a href="ib<%= url_for(:controller => "totext", :action => "item", :only_path => false) + "/" + @docname + @ibstr %>"> iBunko </a>

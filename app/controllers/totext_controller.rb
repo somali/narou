@@ -1,6 +1,5 @@
 # -*- encoding: UTF-8 -*-
 require 'httpclient'
-require 'nkf'
 require 'uri'
 require './lib/narou.rb'
 
@@ -9,26 +8,38 @@ class TotextController < ApplicationController
   end
 
   def show
-    text = HTTPClient.new.get_content(params[:dest])
+#   begin
+      text = HTTPClient.new.get_content(params[:dest])
+#   rescue
     # URLが間違ってたりしてエラーだった場合の対応が必要
-    text.force_encoding(NKF.guess(text))
-    # UTF-8じゃなかった場合の変換を入れる。
+    # どうやってどうやって表示すればいいかわかんないわー。
+    # いっそこのままとかー。orz
+#     redirect_to :back
+#     return
+#   end
 
-    @docname = "testext.txt"
-    @ibstr = ""
+    text.force_encoding("UTF-8")  # NKF.guess(text)
 
-    novel = NarouNovel.new(text)
+    @novel = NarouNovel.new(text)
 
-    testfile = File.open("./public/" + @docname, "w")
-    testfile.puts(novel.title)
-    testfile.puts(novel.subtitle)
-    testfile.puts(novel.author)
-    testfile.puts
-    testfile.puts(novel.document)
-    testfile.close
+    uri = URI.parse(params[:dest])
+    @docname = uri.path.gsub(/\//,"_") + ".txt"
+    @ibstr = "?title=" +URI.escape(@novel.title) + "&author=" + URI.escape(@novel.author)
 
-    @title = novel.title
-    @author = novel.author
-    @ibstr = "?title=" +URI.escape(novel.title) + "&author=" + URI.escape(novel.author)
+    $novel_g = @novel
+  end
+
+  def item
+    @novel = $novel_g
+# Global変数とかやだなにそれー。なんか方法ないのかな。
+
+    newstr = @novel.title << "\n"
+    newstr << @novel.subtitle << "\n"
+    newstr << @novel.author << "\n"
+    newstr << "\n"
+    newstr << @novel.document << "\n"
+
+    @ibtr2 = @novel.title
+    render :text => newstr
   end
 end
