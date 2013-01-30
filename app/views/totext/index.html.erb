@@ -5,9 +5,14 @@
 
 <%= form_tag('totext/show/') do |f| %>
 <div class="field">
-Target URL: <%= text_field_tag "dest","http://ncode.syosetu.com/n6210bh/" %>
+Target URL: <%= text_field_tag "dest", @url %>
 </div>
 <div class="actions">
 <%= submit_tag "submit" %>
 </div>
 <% end %>
+<div class="errors">
+<br>
+<%= flash[:code] %> 
+<%= flash[:phrase] %>
+</div>

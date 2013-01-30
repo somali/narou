@@ -5,24 +5,26 @@ require './lib/narou.rb'
 
 class TotextController < ApplicationController
   def index
+    @url = "http://ncode.syosetu.com/n6210bh/"
   end
 
   def show
-#   begin
-      text = HTTPClient.new.get_content(params[:dest])
-#   rescue
-    # URLが間違ってたりしてエラーだった場合の対応が必要
-    # どうやってどうやって表示すればいいかわかんないわー。
-    # いっそこのままとかー。orz
-#     redirect_to :back
-#     return
-#   end
+    @url = params[:dest]
+    begin
+      text = HTTPClient.new.get_content(@url)
+    rescue
+      ex = $!
+      flash[:phrase] = ex.res.reason
+      flash[:code] = ex.res.status_code
+      redirect_to :back
+      return
+    end
 
     text.force_encoding("UTF-8")  # NKF.guess(text)
 
     @novel = NarouNovel.new(text)
 
-    uri = URI.parse(params[:dest])
+    uri = URI.parse(@url)
     @docname = uri.path.gsub(/\//,"_") + ".txt"
     @ibstr = "?title=" +URI.escape(@novel.title) + "&author=" + URI.escape(@novel.author)
 
